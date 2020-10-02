@@ -1,12 +1,26 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
+import { useState } from 'react';
+import HtmlParse from 'html-react-parser';
 
 export default function Home() {
+  const [result, setResult] = useState('<div/>');
+  const onSubmitHandle = (e) => {
+    e.preventDefault();
+    console.log(e.target.neoTiny.value);
+    setResult(e.target.neoTiny.value)
+  }
+
+  // const render =  ;
+  // const a = document.getElementById('neoTinyId')
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Neo Next App</title>
         <link rel="icon" href="/favicon.ico" />
+        <script src="/tinymce/tinymce.min.js"></script>
+        <script src='/tinymce/init.js'> </script>
       </Head>
 
       <main className={styles.main}>
@@ -20,34 +34,20 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+          <form onSubmit={onSubmitHandle}>
+            <textarea name="neoTiny" id="neoTinyId" style={{visibility: "hidden", Client: "null"}}></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        
         </div>
+ 
+        <div>
+            {HtmlParse(result)}
+            {/* {result?result:null} */}
+        </div>
+
+
       </main>
 
       <footer className={styles.footer}>
@@ -56,9 +56,10 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
+        
       </footer>
     </div>
   )
