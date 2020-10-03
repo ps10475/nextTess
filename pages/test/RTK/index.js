@@ -1,6 +1,8 @@
-import React from 'react';
-import Layout from '../../Component/Layout';
-import { Form, Input, Button, Checkbox } from 'antd';
+import React, { useEffect } from 'react';
+import { Form, Button, Input } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { addUser, getUsers } from '../../../redux/Slice/userSlice';
+import usersApi from '../../../api/usersApi';
 
 const layout = {
     labelCol: { span: 6 },
@@ -10,29 +12,44 @@ const tailLayout = {
     wrapperCol: { offset: 6, span: 18 },
 };
 
+
 const index = () => {
+    const dispatch = useDispatch();
+
+    const dataFromStore = useSelector(state => state.users);
+
+    console.log(dataFromStore);
+
+    const usersAdded = JSON.stringify(dataFromStore)
 
     const onFinish = values => {
         console.log('Success:', values);
+        dispatch(addUser(values))
     };
 
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
     };
-    const onvaluechange = (e) => {
-        console.log(e);
-    }
+
+    useEffect(()=>{
+        async function fetchData(){
+            const params = {postId:1};
+            const a = await usersApi.get(params);
+            dispatch(getUsers(a))
+        }
+        fetchData();
+    },[])
 
     return (
-        <Layout>
+        <div>
+            <h1>Register</h1>
             <Form
                 {...layout}
                 name="basic"
                 initialValues={{ remember: true }}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
-                onValuesChange={onvaluechange}
-                requiredMark={('optional')}
+                requiredMark={true}
             >
                 <Form.Item
                     label="Username"
@@ -45,13 +62,9 @@ const index = () => {
                 <Form.Item
                     label="Password"
                     name="password"
-                    rules={[{ required: false, message: 'Please input your password!' }]}
+                    rules={[{ required: true, message: 'Please input your password!' }]}
                 >
                     <Input.Password />
-                </Form.Item>
-
-                <Form.Item {...tailLayout} name="remember" valuePropName="checked">
-                    <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
                 <Form.Item {...tailLayout}>
@@ -60,7 +73,10 @@ const index = () => {
                     </Button>
                 </Form.Item>
             </Form>
-        </Layout>
+            <div>
+                {usersAdded}
+            </div>
+        </div>
     );
 }
 

@@ -15,10 +15,12 @@ export default function Home() {
   // const a = document.getElementById('neoTinyId')
 
   return (
+    
     <div className={styles.container}>
       <Head>
         <title>Neo Next App</title>
         <link rel="icon" href="/favicon.ico" />
+
         <script src="/tinymce/tinymce.min.js"></script>
         <script src='/tinymce/init.js'> </script>
       </Head>
@@ -62,5 +64,6 @@ export default function Home() {
         
       </footer>
     </div>
+  
   )
 }
